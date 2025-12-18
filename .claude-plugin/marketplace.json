@@ -1,38 +1,21 @@
 {
-    "owner": "rodrigocampos",
+    "name": "seo-website-builder",
+    "owner": {
+        "name": "rodrigocampos",
+        "url": "https://github.com/localxcrm"
+    },
     "plugins": [
         {
             "name": "seo-website-builder",
             "version": "1.0.0",
             "description": "Build SEO and AEO optimized local business websites with React/Next.js. Use when creating local business sites, service pages, location pages, landing pages. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization.",
-            "keywords": [
-                "seo",
-                "website-builder",
-                "next.js",
-                "react",
-                "local-business",
-                "schema-markup",
-                "structured-data",
-                "aeo"
-            ],
-            "triggers": [
-                "build website",
-                "create site",
-                "local business website",
-                "service page",
-                "location page",
-                "Next.js site",
-                "React site",
-                "schema markup",
-                "structured data",
-                "SEO website"
-            ],
-            "skills": [
-                {
-                    "name": "seo-website-builder",
-                    "file": "SKILL.md"
+            "source": ".",
+            "skills": {
+                "seo-website-builder": {
+                    "file": "SKILL.md",
+                    "description": "Build SEO and AEO optimized local business websites"
                 }
-            ]
+            }
         }
     ]
 }
