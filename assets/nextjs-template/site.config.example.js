@@ -558,6 +558,46 @@ module.exports = {
   },
 
   // ═══════════════════════════════════════════════════════════════
+  // GO HIGH LEVEL INTEGRATION
+  // ═══════════════════════════════════════════════════════════════
+  goHighLevel: {
+    // Review Widget - paste full embed code from GHL
+    reviewWidgetCode: `<div id="ghl-reviews" data-location="abc123"></div>
+<script src="https://widgets.leadconnectorhq.com/loader.js" data-resources-url="https://widgets.leadconnectorhq.com/reviews/abc123"></script>`,
+
+    // Contact Form - paste full embed code from GHL
+    contactFormCode: `<iframe src="https://api.leadconnectorhq.com/widget/form/abc123xyz" style="width:100%;height:500px;border:none;"></iframe>`,
+
+    // Calendar/Booking Widget (optional)
+    calendarCode: "",
+
+    // GHL Location ID (for API integrations)
+    locationId: "abc123xyz",
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // TRACKING & ANALYTICS
+  // ═══════════════════════════════════════════════════════════════
+  tracking: {
+    // Facebook Pixel
+    facebookPixelId: "123456789012345",
+    facebookPixelCode: "", // Leave empty if using ID above
+
+    // Google Analytics 4
+    googleAnalyticsId: "G-XXXXXXXXXX",
+    googleAnalyticsCode: "", // Leave empty if using ID above
+
+    // Google Tag Manager
+    googleTagManagerId: "GTM-XXXXXXX",
+    googleTagManagerCode: "", // Leave empty if using ID above
+
+    // Additional Pixels
+    tiktokPixelCode: "",
+    linkedinPixelCode: "",
+    otherPixelCode: "",
+  },
+
+  // ═══════════════════════════════════════════════════════════════
   // MAP SETTINGS
   // ═══════════════════════════════════════════════════════════════
   maps: {

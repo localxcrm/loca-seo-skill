@@ -144,6 +144,32 @@ BRANDING
 48. Unique Selling Points (3-5): ___
 ```
 
+### Section 10: Go High Level & Tracking
+
+```
+GO HIGH LEVEL INTEGRATION
+=========================
+49. GHL Review Widget Embed Code: ___
+    (Paste the full embed code from Go High Level)
+
+50. GHL Contact Form Embed Code: ___
+    (Paste the full form embed code from GHL)
+
+51. GHL Calendar/Booking Embed (optional): ___
+
+52. GHL Location ID (optional): ___
+
+TRACKING PIXELS
+===============
+53. Facebook Pixel ID or Code: ___
+54. Google Analytics (GA4) ID: ___
+    (e.g., G-XXXXXXXXXX)
+55. Google Tag Manager ID: ___
+    (e.g., GTM-XXXXXXX)
+56. Other Tracking Pixels: ___
+    (TikTok, LinkedIn, etc. - paste full code)
+```
+
 ---
 
 ## Validation Rules
@@ -279,6 +305,18 @@ Return a JSON object matching this structure:
   "content": {
     "usps": ["string"],
     "tone": "string"
+  },
+  "goHighLevel": {
+    "reviewWidgetCode": "string (full embed code)",
+    "contactFormCode": "string (full embed code)",
+    "calendarCode": "string (optional)",
+    "locationId": "string (optional)"
+  },
+  "tracking": {
+    "facebookPixelId": "string",
+    "googleAnalyticsId": "string (G-XXXXXXXXXX)",
+    "googleTagManagerId": "string (GTM-XXXXXXX)",
+    "otherPixelCode": "string (optional)"
   },
   "_validation": {
     "complete": boolean,

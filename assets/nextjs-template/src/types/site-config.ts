@@ -320,6 +320,49 @@ export interface MapSettings {
 }
 
 // ═══════════════════════════════════════════════════════════════
+// GO HIGH LEVEL INTEGRATION
+// ═══════════════════════════════════════════════════════════════
+
+export interface GoHighLevel {
+  /** Review widget embed code from GHL */
+  reviewWidgetCode?: string;
+  /** Contact form embed code from GHL */
+  contactFormCode?: string;
+  /** Calendar/booking widget embed code */
+  calendarCode?: string;
+  /** GHL Location ID for API integrations */
+  locationId?: string;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// TRACKING & ANALYTICS
+// ═══════════════════════════════════════════════════════════════
+
+export interface Tracking {
+  /** Facebook Pixel ID (e.g., "123456789") */
+  facebookPixelId?: string;
+  /** Full Facebook Pixel code snippet */
+  facebookPixelCode?: string;
+
+  /** Google Analytics 4 ID (e.g., "G-XXXXXXXXXX") */
+  googleAnalyticsId?: string;
+  /** Full GA4 code snippet */
+  googleAnalyticsCode?: string;
+
+  /** Google Tag Manager ID (e.g., "GTM-XXXXXXX") */
+  googleTagManagerId?: string;
+  /** Full GTM code snippet */
+  googleTagManagerCode?: string;
+
+  /** TikTok Pixel code */
+  tiktokPixelCode?: string;
+  /** LinkedIn Pixel code */
+  linkedinPixelCode?: string;
+  /** Any other tracking pixel code */
+  otherPixelCode?: string;
+}
+
+// ═══════════════════════════════════════════════════════════════
 // BRANDING
 // ═══════════════════════════════════════════════════════════════
 
@@ -605,6 +648,10 @@ export interface SiteConfig {
   reviews: Reviews;
   /** Embed configurations */
   embeds: Embeds;
+  /** Go High Level integration */
+  goHighLevel?: GoHighLevel;
+  /** Tracking and analytics */
+  tracking?: Tracking;
   /** Map settings */
   maps: MapSettings;
   /** Branding (colors, fonts) */

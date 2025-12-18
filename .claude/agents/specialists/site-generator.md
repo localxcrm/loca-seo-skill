@@ -204,6 +204,39 @@ module.exports = {
     googleMapsApiKey: "",
   },
 
+  goHighLevel: {
+    // Review Widget - paste from GHL
+    reviewWidgetCode: "[from data]",
+
+    // Contact Form - paste from GHL
+    contactFormCode: "[from data]",
+
+    // Calendar (optional)
+    calendarCode: "[from data or empty]",
+
+    // Location ID
+    locationId: "[from data or empty]",
+  },
+
+  tracking: {
+    // Facebook Pixel
+    facebookPixelId: "[from data]",
+    facebookPixelCode: "",
+
+    // Google Analytics
+    googleAnalyticsId: "[from data]",
+    googleAnalyticsCode: "",
+
+    // Google Tag Manager
+    googleTagManagerId: "[from data]",
+    googleTagManagerCode: "",
+
+    // Other pixels
+    tiktokPixelCode: "[from data or empty]",
+    linkedinPixelCode: "[from data or empty]",
+    otherPixelCode: "[from data or empty]",
+  },
+
   maps: {
     zoom: 11,
     showServiceArea: true,
