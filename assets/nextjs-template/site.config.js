@@ -248,6 +248,45 @@ module.exports = {
   },
 
   // ═══════════════════════════════════════════════════════════════
+  // GO HIGH LEVEL INTEGRATION
+  // ═══════════════════════════════════════════════════════════════
+  goHighLevel: {
+    // Review Widget - paste full embed code from GHL
+    reviewWidgetCode: "",
+
+    // Contact Form - paste full embed code from GHL
+    contactFormCode: "",
+
+    // Calendar/Booking Widget (optional)
+    calendarCode: "",
+
+    // GHL Location ID (optional, for API integrations)
+    locationId: "",
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // TRACKING & ANALYTICS
+  // ═══════════════════════════════════════════════════════════════
+  tracking: {
+    // Facebook Pixel
+    facebookPixelId: "",        // Just the ID, e.g., "123456789"
+    facebookPixelCode: "",      // Or paste full code snippet
+
+    // Google Analytics 4
+    googleAnalyticsId: "",      // e.g., "G-XXXXXXXXXX"
+    googleAnalyticsCode: "",    // Or paste full code snippet
+
+    // Google Tag Manager
+    googleTagManagerId: "",     // e.g., "GTM-XXXXXXX"
+    googleTagManagerCode: "",   // Or paste full code snippet
+
+    // Additional Pixels (paste full code)
+    tiktokPixelCode: "",
+    linkedinPixelCode: "",
+    otherPixelCode: "",         // Any other tracking pixels
+  },
+
+  // ═══════════════════════════════════════════════════════════════
   // MAP SETTINGS
   // ═══════════════════════════════════════════════════════════════
   maps: {

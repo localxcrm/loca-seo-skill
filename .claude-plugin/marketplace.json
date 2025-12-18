@@ -4,11 +4,26 @@
         "name": "rodrigocampos",
         "url": "https://github.com/localxcrm"
     },
+    "repository": "https://github.com/localxcrm/loca-seo-skill",
+    "license": "MIT",
+    "category": "web-development",
+    "keywords": [
+        "seo",
+        "aeo",
+        "local-business",
+        "next.js",
+        "react",
+        "schema-markup",
+        "website-builder",
+        "local-seo",
+        "answer-engine-optimization",
+        "structured-data"
+    ],
     "plugins": [
         {
             "name": "seo-website-builder",
             "version": "1.0.0",
-            "description": "Build SEO and AEO optimized local business websites with React/Next.js. Use when creating local business sites, service pages, location pages, landing pages. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization.",
+            "description": "Build SEO and AEO optimized local business websites with React/Next.js. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization.",
             "source": "./",
             "skills": [
                 "./SKILL.md"

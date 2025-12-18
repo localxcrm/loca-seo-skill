@@ -1,6 +1,21 @@
 ---
 name: seo-website-builder
-description: "Build SEO and AEO optimized local business websites with React/Next.js. Use when creating local business sites, service pages, location pages, landing pages. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization. Triggers include build website, create site, local business website, service page, location page, Next.js site, React site, schema markup, structured data, SEO website."
+description: "Build SEO and AEO optimized local business websites with React/Next.js. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization for local businesses."
+triggers:
+  - build website
+  - create site
+  - local business website
+  - service page
+  - location page
+  - Next.js site
+  - React site
+  - schema markup
+  - structured data
+  - SEO website
+  - landing page
+  - local SEO
+  - AEO optimization
+  - answer engine optimization
 ---
 
 # SEO Website Builder
@@ -118,44 +133,64 @@ SECTION 6: EMBEDS & MAPS
 40. Review widgets: [ ] Google [ ] Yelp [ ] Testimonials [ ] None
 
 ═══════════════════════════════════════════════════════════════
-SECTION 7: BRANDING & CONTENT
+SECTION 7: GO HIGH LEVEL & TRACKING
 ═══════════════════════════════════════════════════════════════
 
-41. Unique Selling Points (3-5):
+GO HIGH LEVEL EMBEDS:
+41. GHL Review Widget Embed Code: _______________
+    (Paste the full <script> or <iframe> code from GHL)
+
+42. GHL Contact Form Embed Code: _______________
+    (Paste the full form embed code from GHL)
+
+43. GHL Calendar/Booking Embed (optional): _______________
+
+TRACKING PIXELS (paste full code snippets):
+44. Facebook Pixel Code: _______________
+45. Google Analytics (GA4) Code: _______________
+46. Google Tag Manager Code: _______________
+47. Other Tracking Pixels: _______________
+    (TikTok, LinkedIn, etc.)
+
+═══════════════════════════════════════════════════════════════
+SECTION 8: BRANDING & CONTENT
+═══════════════════════════════════════════════════════════════
+
+48. Unique Selling Points (3-5):
     - _______________
     - _______________
     - _______________
 
-42. Target Audience: _______________
+49. Target Audience: _______________
 
-43. Brand Colors:
+50. Brand Colors:
     - Primary: #_______________
     - Secondary: #_______________
     - Accent: #_______________
 
-44. Tone: [ ] Professional [ ] Friendly [ ] Expert [ ] Casual
+51. Tone: [ ] Professional [ ] Friendly [ ] Expert [ ] Casual
 
-45. Customer Pain Points:
+52. Customer Pain Points:
     - _______________
     - _______________
 
 ═══════════════════════════════════════════════════════════════
-SECTION 8: ABOUT PAGE
+SECTION 9: ABOUT PAGE
 ═══════════════════════════════════════════════════════════════
 
-46. Company Story: _______________
-47. Owner Name: _______________
-48. Owner Bio: _______________
-49. Team Size: _______________
-50. Certifications: _______________
-51. Awards: _______________
-52. Community Involvement: _______________
+53. Company Story: _______________
+54. Owner Name: _______________
+55. Owner Bio: _______________
+56. Team Size: _______________
+57. Certifications: _______________
+58. Awards: _______________
+59. Community Involvement: _______________
 
 ═══════════════════════════════════════════════════════════════
-SECTION 9: PAGES & SCHEMA
+SECTION 10: PAGES & SCHEMA
 ═══════════════════════════════════════════════════════════════
 
-53. Pages to create:
+60. Pages to create:
     [ ] Homepage
     [ ] Service Pages
     [ ] Location Pages
@@ -164,7 +199,7 @@ SECTION 9: PAGES & SCHEMA
     [ ] Contact Page
     [ ] All of the above
 
-54. Schema markup:
+61. Schema markup:
     [ ] LocalBusiness
     [ ] Service
     [ ] FAQPage
@@ -181,7 +216,7 @@ SECTION 9: PAGES & SCHEMA
 1. **Extract and run setup script:**
    - Mac/Linux: `chmod +x setup.sh && ./setup.sh`
    - Windows: Double-click `setup.bat`
-2. **Collect intake data** - Complete questionnaire (all 54 fields minimum)
+2. **Collect intake data** - Complete questionnaire (all 61 fields minimum)
 3. **Validate local proof** - Each city needs neighborhoods, landmarks, local paragraph
 4. **Score content** - Use `content-scoring.md` rubric (7+ points to index)
 5. Copy template from `assets/nextjs-template/`
