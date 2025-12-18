@@ -1,6 +1,21 @@
 ---
 name: seo-website-builder
-description: "Build SEO and AEO optimized local business websites with React/Next.js. Use when creating local business sites, service pages, location pages, landing pages. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization. Triggers include build website, create site, local business website, service page, location page, Next.js site, React site, schema markup, structured data, SEO website."
+description: "Build SEO and AEO optimized local business websites with React/Next.js. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization for local businesses."
+triggers:
+  - build website
+  - create site
+  - local business website
+  - service page
+  - location page
+  - Next.js site
+  - React site
+  - schema markup
+  - structured data
+  - SEO website
+  - landing page
+  - local SEO
+  - AEO optimization
+  - answer engine optimization
 ---
 
 # SEO Website Builder
