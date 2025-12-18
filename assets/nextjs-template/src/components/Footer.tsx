@@ -4,8 +4,7 @@ import {
   config, 
   getAllServices, 
   getAllServiceAreas, 
-  getBusinessName, 
-  getFullAddress 
+  getBusinessName
 } from '@/lib/site';
 import GMBMapEmbed from './GMBMapEmbed';
 import SocialIcons from './SocialIcons';

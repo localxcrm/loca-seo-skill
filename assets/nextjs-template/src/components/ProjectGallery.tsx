@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { config, getBusinessName } from '@/lib/site';
+import { getProjectsForService } from '@/lib/site';
 
 interface Project {
   id: string;
@@ -31,14 +31,11 @@ export default function ProjectGallery({
   columns = 2,
   className = '',
 }: ProjectGalleryProps) {
-  const businessName = getBusinessName();
-  
   // Get projects from config or props
   let projects = projectsProp;
   
   if (!projects && serviceSlug) {
-    const service = config.services?.find(s => s.slug === serviceSlug);
-    projects = service?.projects || [];
+    projects = getProjectsForService(serviceSlug);
   }
   
   if (!projects || projects.length === 0) {

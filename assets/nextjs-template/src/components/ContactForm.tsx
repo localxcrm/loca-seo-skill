@@ -44,7 +44,7 @@ export default function ContactForm({
       await new Promise(resolve => setTimeout(resolve, 1000));
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', service: '', message: '' });
-    } catch (error) {
+    } catch {
       setStatus('error');
     }
   };
@@ -63,7 +63,7 @@ export default function ContactForm({
           <div className="text-4xl mb-4">✓</div>
           <h3 className="text-xl font-semibold text-green-800 mb-2">Thank You!</h3>
           <p className="text-green-700">
-            We've received your message and will get back to you within 24 hours.
+            We&apos;ve received your message and will get back to you within 24 hours.
           </p>
           <button
             onClick={() => setStatus('idle')}

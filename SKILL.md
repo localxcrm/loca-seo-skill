@@ -211,6 +211,7 @@ project/
 │   │   ├── page.tsx                      # Homepage
 │   │   ├── layout.tsx                    # Root layout
 │   │   ├── sitemap.ts                    # Dynamic sitemap generation
+│   │   ├── robots.ts                     # Dynamic robots.txt generation
 │   │   ├── services/
 │   │   │   ├── page.tsx                  # Services index
 │   │   │   └── [slug]/page.tsx           # Service pages
@@ -239,8 +240,6 @@ project/
 │       ├── schema.ts                     # All schema generators
 │       ├── seo.ts                        # Meta tag helpers
 │       └── utils.ts                      # Helper functions
-├── public/
-│   └── robots.txt
 ├── site.config.js                        # Business configuration
 └── next.config.js
 ```

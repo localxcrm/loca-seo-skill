@@ -4,12 +4,21 @@ import config from '../../../site.config';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import Breadcrumb from '@/components/Breadcrumb';
+import AICitationBlock from '@/components/AICitationBlock';
 
 export const metadata: Metadata = {
   title: `Our Services | ${config.business.name}`,
   description: `${config.business.name} offers professional ${config.gbpCategories.primary.toLowerCase()} services in ${config.address.city}, ${config.address.state}. View all our services and get a free estimate.`,
   alternates: {
     canonical: `${config.business.url}/services`,
+  },
+  openGraph: {
+    title: `Our Services | ${config.business.name}`,
+    description: `${config.business.name} offers professional ${config.gbpCategories.primary.toLowerCase()} services in ${config.address.city}, ${config.address.state}.`,
+    url: `${config.business.url}/services`,
+    siteName: config.business.name,
+    images: (config.seo?.ogImage || config.business.image) ? [{ url: config.seo?.ogImage || config.business.image }] : [],
+    type: 'website',
   },
 };
 
@@ -33,14 +42,12 @@ export default function ServicesPage() {
       <h1>Our {config.gbpCategories.primary} Services</h1>
 
       {/* Answer Block */}
-      <section className="answer-block">
-        <p>
-          <strong>{config.business.name}</strong> provides comprehensive{' '}
-          {config.gbpCategories.primary.toLowerCase()} services in {config.address.city} and
-          surrounding areas. We offer {config.services.length} specialized services with
-          upfront pricing, licensed professionals, and satisfaction guaranteed.
-        </p>
-      </section>
+      <AICitationBlock
+        customLead={`${config.business.name} provides professional ${config.gbpCategories.primary.toLowerCase()} services in ${config.address.city}, ${config.address.state}`}
+        additionalPoints={[
+          `${config.services.filter((s) => s.index !== false).length} services available`,
+        ]}
+      />
 
       {/* Services Grid */}
       <section className="services-grid">

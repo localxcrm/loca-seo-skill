@@ -9,11 +9,15 @@ import {
   getAllServiceAreas,
   getAllServices,
   getBusinessName,
-  getDisplayCategory,
+  getProjectsForService,
+  shouldIndexCombo,
 } from '@/lib/site';
 import {
   generateServiceSchema,
   generateLocalBusinessSchema,
+  generateServiceOfferSchema,
+  generateHowToSchema,
+  generateImageGallerySchema,
   generateBreadcrumbSchema,
   generateFAQSchema,
 } from '@/lib/schema';
@@ -22,6 +26,9 @@ import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import CTABanner from '@/components/CTABanner';
 import CityMapEmbed from '@/components/CityMapEmbed';
+import AICitationBlock from '@/components/AICitationBlock';
+import LocalDeepParagraph from '@/components/LocalDeepParagraph';
+import ProjectGallery from '@/components/ProjectGallery';
 
 interface LocationServicePageProps {
   params: { city: string; service: string };
@@ -54,19 +61,8 @@ export async function generateMetadata({ params }: LocationServicePageProps): Pr
   const title = `${service.name} ${location.city} ${location.state} | ${businessName}`;
   const description = `Professional ${service.name.toLowerCase()} services in ${location.city}, ${location.state}. ${businessName} offers expert ${service.name.toLowerCase()} for homeowners. Call ${config.business.phone} for a free estimate.`;
 
-  // Determine if this page should be indexed
-  // Index only if area has unique content (neighborhoods, landmarks, or description)
-  const hasUniqueContent = (
-    (location.neighborhoods && location.neighborhoods.length > 0) ||
-    (location.landmarks && location.landmarks.length > 0) ||
-    location.description
-  );
-  
-  const shouldIndex = (
-    location.index !== false &&
-    service.index !== false &&
-    hasUniqueContent
-  );
+  const shouldIndex = shouldIndexCombo(location, service);
+  const ogImages = config.seo?.ogImage ? [{ url: config.seo.ogImage }] : [];
 
   return {
     title,
@@ -80,6 +76,13 @@ export async function generateMetadata({ params }: LocationServicePageProps): Pr
       url: `${config.business.url}/locations/${params.city}/${params.service}`,
       siteName: businessName,
       type: 'website',
+      images: ogImages,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ogImages.map(i => i.url),
     },
     // Noindex weak pages without unique content
     ...(shouldIndex ? {} : { robots: { index: false, follow: true } }),
@@ -93,26 +96,48 @@ export default function LocationServicePage({ params }: LocationServicePageProps
   if (!location || !service) notFound();
 
   const businessName = getBusinessName();
-  const displayCategory = getDisplayCategory();
   const allServices = getAllServices();
   const allAreas = getAllServiceAreas();
+  const projects = getProjectsForService(service.slug);
   
   // Get other services and nearby cities for internal linking
   const otherServices = allServices.filter(s => s.slug !== service.slug).slice(0, 4);
   const nearbyCities = allAreas.filter(a => a.slug !== location.slug).slice(0, 4);
 
-  // Create location-specific config for schema
-  const locationOverride = {
-    address: {
-      ...config.address,
-      city: location.city,
-      state: location.state,
-    },
-  };
-
   // Generate schemas
-  const serviceSchema = generateServiceSchema(service);
-  const localBusinessSchema = generateLocalBusinessSchema(locationOverride);
+  const comboUrl = `${config.business.url}/locations/${location.slug}/${service.slug}`;
+  const serviceSchema = generateServiceSchema(service, {
+    url: comboUrl,
+    areaServed: `${location.city}, ${location.state}`,
+  });
+  const offerSchema = generateServiceOfferSchema(service, `${location.city}, ${location.state}`);
+  const howToSchema = generateHowToSchema(
+    `How We ${service.name} in ${location.city}`,
+    `Our step-by-step ${service.name.toLowerCase()} process for homeowners in ${location.city}, ${location.state}.`,
+    service.process || []
+  );
+  const imageGallerySchema = projects.length > 0
+    ? generateImageGallerySchema(
+        `${service.name} Projects`,
+        projects.slice(0, 6).flatMap(p => ([
+          {
+            url: p.afterImage,
+            name: `${p.title} - After`,
+            description: p.description,
+            caption: `After: ${p.title}`,
+            contentLocation: p.location,
+          },
+          {
+            url: p.beforeImage,
+            name: `${p.title} - Before`,
+            description: p.description,
+            caption: `Before: ${p.title}`,
+            contentLocation: p.location,
+          },
+        ]))
+      )
+    : null;
+  const localBusinessSchema = generateLocalBusinessSchema();
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: config.business.url },
     { name: 'Locations', url: `${config.business.url}/locations` },
@@ -149,7 +174,7 @@ export default function LocationServicePage({ params }: LocationServicePageProps
 
   return (
     <>
-      <SchemaMarkup schema={[serviceSchema, localBusinessSchema, breadcrumbSchema, faqSchema]} />
+      <SchemaMarkup schema={[serviceSchema, offerSchema, howToSchema, imageGallerySchema, localBusinessSchema, breadcrumbSchema, faqSchema]} />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
@@ -168,23 +193,7 @@ export default function LocationServicePage({ params }: LocationServicePageProps
         </h1>
 
         {/* Answer Block for AI Overview */}
-        <section className="answer-block bg-gray-50 p-6 rounded-lg border-l-4 border-primary mb-10">
-          <p className="text-lg mb-4">
-            <strong>{businessName}</strong> provides professional <strong>{service.name.toLowerCase()}</strong> services 
-            to homeowners in {location.city}, {location.state}
-            {location.neighborhoods && location.neighborhoods.length > 0 && 
-              ` including ${location.neighborhoods.slice(0, 3).join(', ')}`
-            }.
-            {service.priceRange && <> Pricing starts at <strong>{service.priceRange}</strong>.</>}
-            {' '}Call <a href={`tel:${config.business.phone}`} className="text-primary font-semibold">{config.business.phone}</a> for a free estimate.
-          </p>
-          <ul className="space-y-1">
-            <li>✓ Serving {location.city} and surrounding areas</li>
-            <li>✓ Free estimates with transparent pricing</li>
-            <li>✓ Licensed and insured professionals</li>
-            {service.duration && <li>✓ Typical project time: {service.duration}</li>}
-          </ul>
-        </section>
+        <AICitationBlock service={service} location={location} className="mb-10" />
 
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
@@ -209,10 +218,16 @@ export default function LocationServicePage({ params }: LocationServicePageProps
               )}
             </section>
 
+            {/* Local Deep Paragraph (unique local proof) */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold mb-4">Local Expertise in {location.city}</h2>
+              <LocalDeepParagraph location={location} service={service} />
+            </section>
+
             {/* Features */}
             {service.features && service.features.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold mb-4">What's Included</h2>
+                <h2 className="text-2xl font-bold mb-4">What&apos;s Included</h2>
                 <ul className="grid md:grid-cols-2 gap-3">
                   {service.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
@@ -221,6 +236,72 @@ export default function LocationServicePage({ params }: LocationServicePageProps
                     </li>
                   ))}
                 </ul>
+              </section>
+            )}
+
+            {/* Our Process */}
+            <section className="mb-10">
+              <h2 className="text-2xl font-bold mb-4">Our {service.name} Process</h2>
+              <div className="space-y-4">
+                {(service.process && service.process.length > 0
+                  ? service.process.map((step) => ({
+                      step: step.step,
+                      title: step.name,
+                      desc: step.description,
+                    }))
+                  : [
+                      { step: 1, title: 'Free Consultation', desc: 'We confirm scope, pricing, and timeline.' },
+                      { step: 2, title: 'Preparation', desc: 'We prep the area and protect your home.' },
+                      { step: 3, title: 'Professional Service', desc: 'Our team completes the work to spec.' },
+                      { step: 4, title: 'Final Walkthrough', desc: 'We verify quality and clean up thoroughly.' },
+                    ]
+                ).map((item) => (
+                  <div key={item.step} className="flex gap-4">
+                    <div className="flex-shrink-0 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
+                      {item.step}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold">{item.title}</h3>
+                      <p className="text-gray-600">{item.desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* Materials / Brands */}
+            {service.materials && service.materials.length > 0 && (
+              <section className="mb-10">
+                <h2 className="text-2xl font-bold mb-4">Materials & Brands We Use</h2>
+                <ul className="grid md:grid-cols-2 gap-3">
+                  {service.materials.map((material, i) => (
+                    <li key={i} className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+                      <span className="text-primary">✓</span>
+                      <span>{material}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Common Issues */}
+            {service.commonIssues && service.commonIssues.length > 0 && (
+              <section className="mb-10">
+                <h2 className="text-2xl font-bold mb-4">Common Issues We Fix in {location.city}</h2>
+                <ul className="space-y-3">
+                  {service.commonIssues.map((issue, i) => (
+                    <li key={i} className="bg-gray-50 p-4 rounded-lg">
+                      {issue}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Project Gallery */}
+            {service.showProjects !== false && projects.length > 0 && (
+              <section className="mb-10">
+                <ProjectGallery serviceSlug={service.slug} title={`${service.name} Projects`} columns={2} />
               </section>
             )}
 

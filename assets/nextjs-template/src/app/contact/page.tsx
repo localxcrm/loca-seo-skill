@@ -7,12 +7,21 @@ import Breadcrumb from '@/components/Breadcrumb';
 import ContactForm from '@/components/ContactForm';
 import GMBMapEmbed from '@/components/GMBMapEmbed';
 import SocialIcons from '@/components/SocialIcons';
+import AICitationBlock from '@/components/AICitationBlock';
 
 export const metadata: Metadata = {
   title: `Contact ${config.business.name} | Free Estimate`,
   description: `Contact ${config.business.name} for a free estimate. Call ${config.business.phone} or fill out our form. Serving ${config.address.city}, ${config.address.state} and surrounding areas.`,
   alternates: {
     canonical: `${config.business.url}/contact`,
+  },
+  openGraph: {
+    title: `Contact ${config.business.name} | Free Estimate`,
+    description: `Contact ${config.business.name} for a free estimate. Call ${config.business.phone} or fill out our form.`,
+    url: `${config.business.url}/contact`,
+    siteName: config.business.name,
+    images: (config.seo?.ogImage || config.business.image) ? [{ url: config.seo?.ogImage || config.business.image }] : [],
+    type: 'website',
   },
 };
 
@@ -54,6 +63,11 @@ export default function ContactPage() {
         />
 
         <h1 className="text-4xl font-bold mb-6">Contact {config.business.name}</h1>
+
+        <AICitationBlock
+          customLead={`Call ${config.business.phone} or send a message to get a free estimate from ${config.business.name}`}
+          className="mb-10"
+        />
 
         <p className="text-lg text-gray-700 mb-10 max-w-2xl">
           Ready to get started? Contact us for a free, no-obligation estimate. 

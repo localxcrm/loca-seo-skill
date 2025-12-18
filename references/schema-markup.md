@@ -41,9 +41,9 @@ export function generateLocalBusinessSchema(siteConfig = config) {
       "longitude": siteConfig.geo.longitude
     },
     "openingHoursSpecification": generateOpeningHours(siteConfig.hours),
-    "areaServed": siteConfig.serviceArea.map(area => ({
+    "areaServed": siteConfig.serviceAreas.map(area => ({
       "@type": "City",
-      "name": area
+      "name": `${area.city}, ${area.state}`
     })),
     "sameAs": Object.values(siteConfig.social).filter(Boolean)
   };
@@ -105,9 +105,9 @@ export function generateServiceSchema(
       "name": siteConfig.business.name,
       "url": siteConfig.business.url
     },
-    "areaServed": siteConfig.serviceArea.map(area => ({
+    "areaServed": siteConfig.serviceAreas.map(area => ({
       "@type": "City",
-      "name": area
+      "name": `${area.city}, ${area.state}`
     })),
     "url": `${siteConfig.business.url}/services/${service.slug}`
   };
@@ -349,6 +349,158 @@ export function generateWebPageSchema(
     }
   ]
 }
+```
+
+### Person Schema (for About page)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "John Smith",
+  "jobTitle": "Owner & Founder",
+  "description": "Master plumber with 20+ years experience in residential and commercial plumbing.",
+  "image": "https://example.com/images/owner.jpg",
+  "telephone": "(512) 555-1234",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "ABC Plumbing",
+    "url": "https://example.com"
+  },
+  "knowsAbout": [
+    "Residential plumbing",
+    "Commercial plumbing",
+    "Water heater installation"
+  ],
+  "hasCredential": [
+    {
+      "@type": "EducationalOccupationalCredential",
+      "name": "Master Plumber License",
+      "credentialCategory": "Professional License"
+    }
+  ]
+}
+```
+
+### ImageObject Schema (for galleries)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "ImageObject",
+  "url": "https://example.com/images/projects/kitchen-remodel.jpg",
+  "contentUrl": "https://example.com/images/projects/kitchen-remodel.jpg",
+  "name": "Kitchen Plumbing Remodel",
+  "description": "Complete kitchen plumbing renovation including new sink and dishwasher installation",
+  "caption": "Before and after of kitchen plumbing upgrade in Austin home",
+  "contentLocation": {
+    "@type": "Place",
+    "name": "Austin, TX"
+  },
+  "author": {
+    "@type": "Organization",
+    "name": "ABC Plumbing"
+  },
+  "copyrightHolder": {
+    "@type": "Organization",
+    "name": "ABC Plumbing"
+  }
+}
+```
+
+### ImageGallery Schema
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "ImageGallery",
+  "name": "Recent Plumbing Projects",
+  "about": {
+    "@type": "Organization",
+    "name": "ABC Plumbing"
+  },
+  "image": [
+    {
+      "@type": "ImageObject",
+      "url": "https://example.com/images/project-1.jpg",
+      "name": "Bathroom Renovation",
+      "description": "Complete bathroom plumbing overhaul"
+    },
+    {
+      "@type": "ImageObject",
+      "url": "https://example.com/images/project-2.jpg",
+      "name": "Water Heater Installation",
+      "description": "Tankless water heater installation in Austin home"
+    }
+  ]
+}
+```
+
+### Offer Schema (for service pricing)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "Offer",
+  "name": "Water Heater Installation",
+  "description": "Professional water heater installation including removal of old unit",
+  "priceCurrency": "USD",
+  "priceSpecification": {
+    "@type": "PriceSpecification",
+    "priceCurrency": "USD",
+    "minPrice": 800,
+    "maxPrice": 2500
+  },
+  "availability": "https://schema.org/InStock",
+  "url": "https://example.com/services/water-heater-installation",
+  "areaServed": [
+    { "@type": "City", "name": "Austin, TX" },
+    { "@type": "City", "name": "Round Rock, TX" }
+  ],
+  "seller": {
+    "@type": "Plumber",
+    "name": "ABC Plumbing",
+    "url": "https://example.com"
+  }
+}
+```
+
+---
+
+## New Schema Generators (v2.0)
+
+The updated `src/lib/schema.ts` includes these additional generators:
+
+```typescript
+// Person schema for owner/team
+import { generatePersonSchema, generateOwnerSchema } from '@/lib/schema';
+
+// On About page:
+const ownerSchema = generateOwnerSchema(); // Uses config.about.owner
+
+// ImageObject/Gallery for portfolio
+import { generateImageObjectSchema, generateImageGallerySchema } from '@/lib/schema';
+
+const projectImages = [
+  { url: '/images/project-1.jpg', name: 'Kitchen Remodel', contentLocation: 'Austin, TX' },
+  { url: '/images/project-2.jpg', name: 'Bathroom Update', contentLocation: 'Round Rock, TX' },
+];
+const gallerySchema = generateImageGallerySchema('Recent Projects', projectImages);
+
+// HowTo schema for service process
+import { generateHowToSchema } from '@/lib/schema';
+
+const howToSchema = generateHowToSchema(
+  'How We Install Water Heaters',
+  'Our professional water heater installation process',
+  service.process, // { step, name, description }[]
+  { totalTime: 'PT4H' } // Optional ISO 8601 duration
+);
+
+// Offer schema for service pricing
+import { generateOfferSchema, generateServiceOfferSchema } from '@/lib/schema';
+
+const offerSchema = generateServiceOfferSchema(service, 'Austin, TX');
 ```
 
 ---

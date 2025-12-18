@@ -20,20 +20,22 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: config.business.url,
     siteName: config.business.name,
-    images: [
-      {
-        url: config.business.image,
-        width: 1200,
-        height: 630,
-        alt: config.business.name,
-      },
-    ],
+    images: (config.seo?.ogImage || config.business.image)
+      ? [
+          {
+            url: config.seo?.ogImage || config.business.image,
+            width: 1200,
+            height: 630,
+            alt: config.business.name,
+          },
+        ]
+      : [],
   },
   twitter: {
     card: 'summary_large_image',
     title: config.business.name,
     description: config.business.description,
-    images: [config.business.image],
+    images: [config.seo?.ogImage || config.business.image].filter(Boolean) as string[],
   },
   robots: {
     index: true,

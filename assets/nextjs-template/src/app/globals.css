@@ -96,6 +96,21 @@ section {
   z-index: 100;
 }
 
+.skip-to-content {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #0066cc;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 200;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
+}
+
 .header-container {
   max-width: 1200px;
   margin: 0 auto;
@@ -110,6 +125,12 @@ section {
   font-size: 1.25rem;
   font-weight: 700;
   color: #333;
+}
+
+.logo img {
+  height: 40px;
+  width: auto;
+  display: block;
 }
 
 .nav {

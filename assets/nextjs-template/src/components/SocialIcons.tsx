@@ -62,7 +62,7 @@ const socialIcons: Record<string, JSX.Element> = {
 };
 
 export default function SocialIcons({ size = 'md', showLabels = false, className = '' }: SocialIconsProps) {
-  const socialLinks = Object.entries(config.social || {}).filter(([_, url]) => url);
+  const socialLinks = Object.entries(config.social || {}).filter(([, url]) => url);
 
   if (socialLinks.length === 0) return null;
 

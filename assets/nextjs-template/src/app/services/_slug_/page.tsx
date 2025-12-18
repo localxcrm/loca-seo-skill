@@ -9,9 +9,14 @@ import {
   getAllServices,
   getAllServiceAreas,
   getBusinessName,
+  getProjectsForService,
+  shouldIndexService,
 } from '@/lib/site';
 import { 
   generateServiceSchema, 
+  generateServiceOfferSchema,
+  generateHowToSchema,
+  generateImageGallerySchema,
   generateBreadcrumbSchema, 
   generateFAQSchema 
 } from '@/lib/schema';
@@ -19,6 +24,8 @@ import SchemaMarkup from '@/components/SchemaMarkup';
 import Breadcrumb from '@/components/Breadcrumb';
 import FAQ from '@/components/FAQ';
 import CTABanner from '@/components/CTABanner';
+import AICitationBlock from '@/components/AICitationBlock';
+import ProjectGallery from '@/components/ProjectGallery';
 
 interface ServicePageProps {
   params: { slug: string };
@@ -38,6 +45,8 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   const title = `${service.name} ${config.address.city} ${config.address.state} | ${businessName}`;
   const description = service.description || 
     `Professional ${service.name.toLowerCase()} services in ${config.address.city}, ${config.address.state}. Call ${config.business.phone} for a free estimate.`;
+  const shouldIndex = shouldIndexService(service);
+  const ogImages = config.seo?.ogImage ? [{ url: config.seo.ogImage }] : [];
 
   return {
     title,
@@ -50,7 +59,15 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
       description,
       url: `${config.business.url}/services/${service.slug}`,
       siteName: businessName,
+      images: ogImages,
     },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ogImages.map(i => i.url),
+    },
+    ...(shouldIndex ? {} : { robots: { index: false, follow: true } }),
   };
 }
 
@@ -61,9 +78,37 @@ export default function ServicePage({ params }: ServicePageProps) {
   const businessName = getBusinessName();
   const serviceAreas = getAllServiceAreas();
   const otherServices = getAllServices().filter(s => s.slug !== service.slug).slice(0, 4);
+  const projects = getProjectsForService(service.slug);
 
   // Generate schemas
   const serviceSchema = generateServiceSchema(service);
+  const offerSchema = generateServiceOfferSchema(service);
+  const howToSchema = generateHowToSchema(
+    `How We ${service.name}`,
+    `Our step-by-step ${service.name.toLowerCase()} process in ${config.address.city}, ${config.address.state}.`,
+    service.process || []
+  );
+  const imageGallerySchema = projects.length > 0
+    ? generateImageGallerySchema(
+        `${service.name} Projects`,
+        projects.slice(0, 6).flatMap(p => ([
+          {
+            url: p.afterImage,
+            name: `${p.title} - After`,
+            description: p.description,
+            caption: `After: ${p.title}`,
+            contentLocation: p.location,
+          },
+          {
+            url: p.beforeImage,
+            name: `${p.title} - Before`,
+            description: p.description,
+            caption: `Before: ${p.title}`,
+            contentLocation: p.location,
+          },
+        ]))
+      )
+    : null;
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: config.business.url },
     { name: 'Services', url: `${config.business.url}/services` },
@@ -93,7 +138,7 @@ export default function ServicePage({ params }: ServicePageProps) {
 
   return (
     <>
-      <SchemaMarkup schema={[serviceSchema, breadcrumbSchema, faqSchema]} />
+      <SchemaMarkup schema={[serviceSchema, offerSchema, howToSchema, imageGallerySchema, breadcrumbSchema, faqSchema]} />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Breadcrumb */}
@@ -111,20 +156,7 @@ export default function ServicePage({ params }: ServicePageProps) {
         </h1>
 
         {/* Answer Block for AI Overview */}
-        <section className="answer-block bg-gray-50 p-6 rounded-lg border-l-4 border-primary mb-10">
-          <p className="text-lg mb-4">
-            {businessName} offers professional <strong>{service.name.toLowerCase()}</strong> services 
-            for homeowners in {config.address.city} and surrounding areas.
-            {service.priceRange && <> Pricing starts at <strong>{service.priceRange}</strong>.</>}
-            {' '}Call <a href={`tel:${config.business.phone}`} className="text-primary font-semibold">{config.business.phone}</a> for a free estimate.
-          </p>
-          <ul className="space-y-1">
-            <li>✓ Free estimates with transparent pricing</li>
-            <li>✓ Licensed and insured professionals</li>
-            <li>✓ Quality workmanship guaranteed</li>
-            {service.duration && <li>✓ Typical project time: {service.duration}</li>}
-          </ul>
-        </section>
+        <AICitationBlock service={service} className="mb-10" />
 
         <div className="grid lg:grid-cols-3 gap-12">
           {/* Main Content */}
@@ -145,7 +177,7 @@ export default function ServicePage({ params }: ServicePageProps) {
             {/* Features */}
             {service.features && service.features.length > 0 && (
               <section className="mb-10">
-                <h2 className="text-2xl font-bold mb-4">What's Included</h2>
+                <h2 className="text-2xl font-bold mb-4">What&apos;s Included</h2>
                 <ul className="grid md:grid-cols-2 gap-3">
                   {service.features.map((feature, i) => (
                     <li key={i} className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
@@ -161,12 +193,19 @@ export default function ServicePage({ params }: ServicePageProps) {
             <section className="mb-10">
               <h2 className="text-2xl font-bold mb-4">Our {service.name} Process</h2>
               <div className="space-y-4">
-                {[
-                  { step: 1, title: 'Free Consultation', desc: 'We discuss your needs and provide a detailed estimate.' },
-                  { step: 2, title: 'Preparation', desc: 'We prepare the area and protect your belongings.' },
-                  { step: 3, title: 'Expert Work', desc: 'Our professionals complete the work to your specifications.' },
-                  { step: 4, title: 'Final Walkthrough', desc: 'We review the completed work with you to ensure satisfaction.' },
-                ].map((item) => (
+                {(service.process && service.process.length > 0
+                  ? service.process.map((step) => ({
+                      step: step.step,
+                      title: step.name,
+                      desc: step.description,
+                    }))
+                  : [
+                      { step: 1, title: 'Free Consultation', desc: 'We discuss your needs and provide a detailed estimate.' },
+                      { step: 2, title: 'Preparation', desc: 'We prepare the area and protect your belongings.' },
+                      { step: 3, title: 'Expert Work', desc: 'Our professionals complete the work to your specifications.' },
+                      { step: 4, title: 'Final Walkthrough', desc: 'We review the completed work with you to ensure satisfaction.' },
+                    ]
+                ).map((item) => (
                   <div key={item.step} className="flex gap-4">
                     <div className="flex-shrink-0 w-10 h-10 bg-primary text-white rounded-full flex items-center justify-center font-bold">
                       {item.step}
@@ -179,6 +218,42 @@ export default function ServicePage({ params }: ServicePageProps) {
                 ))}
               </div>
             </section>
+
+            {/* Materials / Brands */}
+            {service.materials && service.materials.length > 0 && (
+              <section className="mb-10">
+                <h2 className="text-2xl font-bold mb-4">Materials & Brands We Use</h2>
+                <ul className="grid md:grid-cols-2 gap-3">
+                  {service.materials.map((material, i) => (
+                    <li key={i} className="flex items-center gap-2 bg-gray-50 p-3 rounded-lg">
+                      <span className="text-primary">✓</span>
+                      <span>{material}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Common Issues */}
+            {service.commonIssues && service.commonIssues.length > 0 && (
+              <section className="mb-10">
+                <h2 className="text-2xl font-bold mb-4">Common Issues We Fix</h2>
+                <ul className="space-y-3">
+                  {service.commonIssues.map((issue, i) => (
+                    <li key={i} className="bg-gray-50 p-4 rounded-lg">
+                      {issue}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
+            {/* Project Gallery */}
+            {service.showProjects !== false && projects.length > 0 && (
+              <section className="mb-10">
+                <ProjectGallery serviceSlug={service.slug} title={`${service.name} Projects`} columns={2} />
+              </section>
+            )}
 
             {/* Service Areas for This Service */}
             <section className="mb-10">

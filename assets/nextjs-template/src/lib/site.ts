@@ -39,10 +39,20 @@ export interface Service {
   features?: string[];
   faqs?: Array<{ question: string; answer: string }>;
   index?: boolean;
+  showProjects?: boolean;
   // Expertise fields
   process?: Array<{ step: number; name: string; description: string }>;
   materials?: string[];
   commonIssues?: string[];
+}
+
+export interface Project {
+  id: string;
+  title: string;
+  location?: string;
+  beforeImage: string;
+  afterImage: string;
+  description?: string;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -54,7 +64,7 @@ export interface Service {
  * Use this ONLY in schema generators
  */
 export function getSchemaType(): string {
-  return config.business.schemaType || config.business.type || 'LocalBusiness';
+  return config.business.schemaType || 'LocalBusiness';
 }
 
 /**
@@ -62,7 +72,7 @@ export function getSchemaType(): string {
  * Use this in page titles, descriptions, content
  */
 export function getDisplayCategory(): string {
-  return config.gbpCategories?.primary || config.business.type || 'Local Business';
+  return config.gbpCategories?.primary || 'Local Business';
 }
 
 /**
@@ -110,7 +120,18 @@ export function getAllServiceSlugs(): string[] {
  * Get indexable services only
  */
 export function getIndexableServices(): Service[] {
-  return getAllServices().filter(s => s.index !== false);
+  return getAllServices().filter(shouldIndexService);
+}
+
+/**
+ * Determine if a service page should be indexed (SEO/AEO readiness)
+ */
+export function shouldIndexService(service: Service): boolean {
+  if (service.index === false) return false;
+  // Pricing + duration are required for strong AI citation blocks
+  const hasPricing = Boolean(service.priceRange) || service.priceMin !== undefined;
+  const hasDuration = Boolean(service.duration);
+  return hasPricing && hasDuration;
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -142,7 +163,7 @@ export function getAllAreaSlugs(): string[] {
  * Get indexable areas only
  */
 export function getIndexableAreas(): ServiceArea[] {
-  return getAllServiceAreas().filter(a => a.index !== false);
+  return getAllServiceAreas().filter(a => a.index !== false && hasLocalProof(a));
 }
 
 /**
@@ -253,9 +274,13 @@ export function hasTrustSignals(): boolean {
 export function hasLocalProof(area: ServiceArea): boolean {
   const hasNeighborhoods = (area.neighborhoods?.length || 0) >= 2;
   const hasLandmarks = (area.landmarks?.length || 0) >= 2;
-  const hasLocalParagraph = Boolean(area.localParagraph?.trim());
+  const hasCounty = Boolean(area.county);
+
+  const localParagraph = area.localParagraph?.trim() || '';
+  const localWordCount = localParagraph.split(/\s+/).filter(Boolean).length;
+  const hasLocalParagraph = localWordCount >= 50;
   
-  return (hasNeighborhoods || hasLandmarks) && hasLocalParagraph;
+  return hasCounty && (hasNeighborhoods || hasLandmarks) && hasLocalParagraph;
 }
 
 /**
@@ -277,9 +302,24 @@ export function shouldIndexCombo(area: ServiceArea, service: Service): boolean {
   if (service.index === false) return false;
   
   // Must have pricing and duration for AI citation
-  if (!service.priceRange && !service.priceMin) return false;
+  const hasPricing = Boolean(service.priceRange) || service.priceMin !== undefined;
+  const hasDuration = Boolean(service.duration);
+  if (!hasPricing || !hasDuration) return false;
   
   return true;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PROJECT / PORTFOLIO HELPERS
+// ═══════════════════════════════════════════════════════════════
+
+/**
+ * Get project gallery items for a service slug.
+ * Projects are defined in `site.config.js` under `projects[serviceSlug]`.
+ */
+export function getProjectsForService(serviceSlug: string): Project[] {
+  const projects = (config.projects as Record<string, Project[]> | undefined)?.[serviceSlug];
+  return Array.isArray(projects) ? projects : [];
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -357,7 +397,7 @@ export function getMapZoom(): number {
  * Get sitemap priority for a page type
  */
 export function getSitemapPriority(pageType: string): number {
-  const priorities = config.sitemap?.priorities || {};
+  const priorities = (config.sitemap?.priorities || {}) as Record<string, number>;
   const defaults: Record<string, number> = {
     homepage: 1.0,
     services: 0.9,
@@ -373,7 +413,7 @@ export function getSitemapPriority(pageType: string): number {
  * Get sitemap change frequency for a page type
  */
 export function getSitemapChangeFreq(pageType: string): string {
-  const freqs = config.sitemap?.changeFrequency || {};
+  const freqs = (config.sitemap?.changeFrequency || {}) as Record<string, string>;
   const defaults: Record<string, string> = {
     homepage: 'weekly',
     services: 'monthly',

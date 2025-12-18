@@ -173,11 +173,10 @@ export function BrandsWeUseCompact({
 
 // Full section with description for service pages
 interface BrandsSectionProps {
-  serviceSlug?: string;
   className?: string;
 }
 
-export function BrandsSection({ serviceSlug, className = '' }: BrandsSectionProps) {
+export function BrandsSection({ className = '' }: BrandsSectionProps) {
   const brands = config.brands || [];
   
   if (brands.length === 0) {

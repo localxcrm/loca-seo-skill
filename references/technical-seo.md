@@ -31,18 +31,23 @@ Example: `Plumber Round Rock TX | ABC Plumbing`
 
 ## robots.txt
 
-```txt
-# /public/robots.txt
-User-agent: *
-Allow: /
+Prefer generating robots via Next.js App Router:
 
-# Block admin/private areas
-Disallow: /admin/
-Disallow: /api/
-Disallow: /private/
+```ts
+// src/app/robots.ts
+import type { MetadataRoute } from 'next';
+import { config } from '@/lib/site';
 
-# Sitemap location
-Sitemap: https://example.com/sitemap.xml
+export default function robots(): MetadataRoute.Robots {
+  const siteUrl = config.business.url.replace(/\/$/, '');
+
+  return {
+    rules: [
+      { userAgent: '*', allow: '/', disallow: ['/admin/', '/api/', '/private/'] },
+    ],
+    sitemap: `${siteUrl}/sitemap.xml`,
+  };
+}
 ```
 
 ---
@@ -94,8 +99,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   }));
 
   // Location pages
-  const locationPages = config.serviceArea.map((city) => ({
-    url: `${baseUrl}/locations/${city.toLowerCase().replace(/\s+/g, '-')}`,
+  const locationPages = config.serviceAreas.map((area) => ({
+    url: `${baseUrl}/locations/${area.slug}`,
     lastModified: new Date(),
     priority: 0.8,
   }));

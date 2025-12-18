@@ -363,3 +363,111 @@ const canIndexCombo = (area, service) => (
 - "typically" instead of "always"
 - "$X-Y" instead of exact prices
 - "most projects" instead of "all projects"
+
+---
+
+## Local Paragraph Examples
+
+The `localParagraph` field is REQUIRED for indexing location pages. Here are examples for different business types to help you write effective local content.
+
+### Painter Example
+```
+In Maynard, many homes built near the historic mill district feature original wood
+trim from the 1890s-1920s. The town's proximity to the Assabet River means higher
+humidity, which affects exterior paint longevity. We frequently serve neighborhoods
+along Summer Street and near Glenwood, where the mix of Victorian and mid-century
+homes requires specialized prep for lead-safe renovation. Local regulations require
+EPA-certified contractors for pre-1978 homes.
+```
+
+### Plumber Example
+```
+Concord's historic homes in the Monument Square area often have original cast iron
+plumbing from the early 1900s. Many properties near Walden Pond experience seasonal
+water table changes that affect basement drainage. Our team regularly services homes
+in Nine Acre Corner and along Lowell Road, where the combination of older pipes and
+hard water creates unique challenges for water heaters and fixtures. We coordinate
+with the Concord Water Department for main line connections.
+```
+
+### HVAC Example
+```
+Lexington homeowners in the Battle Green area frequently deal with heating
+challenges in their Colonial-era homes, which weren't designed for modern HVAC
+systems. The town's location along the Route 2 corridor means exposure to harsh
+winter winds. We serve many properties in Follen Heights and East Lexington where
+the 1950s-era split-levels require ductwork modifications. Our technicians are
+familiar with Lexington's permitting requirements for system replacements.
+```
+
+### Electrician Example
+```
+Arlington's densely populated neighborhoods near Massachusetts Avenue feature a mix
+of triple-deckers and single-family homes from the 1920s, many still running on
+original 60-amp electrical panels. The town's older housing stock near Spy Pond
+often requires service upgrades to handle modern appliances and EV chargers. We
+frequently work in Arlington Heights and East Arlington, where the combination of
+knob-and-tube wiring and finished basements requires careful inspection before
+renovation work.
+```
+
+### Landscaper Example
+```
+Wellesley's estates along Cliff Road and near Morse's Pond feature mature
+landscapes with specimen trees planted in the 1920s. The town's clay-heavy soil
+and proximity to the Charles River create drainage challenges on many properties.
+We maintain gardens in Wellesley Farms and Overbrook where the established
+rhododendron and azalea plantings require specific pH management. Local bylaws
+require permits for tree removal over 6 inches in diameter.
+```
+
+### Roofer Example
+```
+Newton's homes in Waban and Chestnut Hill often feature slate roofs original to
+their 1900s construction. The city's hilly terrain means roofs face varying wind
+exposure depending on orientation. We've repaired countless roofs along
+Commonwealth Avenue where ice dams form due to the large overhangs common in
+Victorian architecture. Newton requires building permits for roof replacements
+and has specific requirements for historical districts.
+```
+
+### Dentist Example
+```
+Our Brookline practice serves families from Coolidge Corner to Washington Square,
+with many patients coming from the nearby colleges and hospitals. The neighborhood's
+diverse population includes many international residents who appreciate our
+multilingual staff. We're conveniently located near the C Line, making us accessible
+to patients throughout the Boston metro area. Our office has served the Brookline
+community for over 15 years, with many second-generation patients.
+```
+
+### Cleaning Service Example
+```
+In Cambridge, we clean everything from Harvard Square brownstones to modern condos
+in Kendall Square. Many homes near Brattle Street feature original hardwood floors
+and built-in cabinetry that require specialized cleaning techniques. Our teams
+understand the challenges of cleaning triple-deckers in Cambridgeport where narrow
+staircases and radiator heating create unique dust patterns. We're familiar with
+the move-in/move-out schedules of local universities.
+```
+
+### Writing Tips
+
+1. **Name specific neighborhoods** (not just "the area")
+2. **Reference local landmarks** (parks, schools, historic sites)
+3. **Mention local challenges** (climate, housing types, regulations)
+4. **Include technical details** relevant to your trade
+5. **Show familiarity** with local regulations and requirements
+6. **Keep it 50-100 words** for optimal content density
+
+### What NOT to Write
+
+**Bad Example (generic):**
+```
+We proudly serve the residents of Springfield and surrounding areas. Our team is
+committed to providing excellent service to all our customers. Contact us today
+for a free estimate.
+```
+
+**Why it's bad:** No neighborhoods, no landmarks, no local specifics. This could
+be about any city and any business.

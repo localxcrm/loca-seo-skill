@@ -19,6 +19,7 @@ import ServiceAreaList from '@/components/ServiceAreaList';
 import Reviews from '@/components/Reviews';
 import FAQ from '@/components/FAQ';
 import CTABanner from '@/components/CTABanner';
+import AICitationBlock from '@/components/AICitationBlock';
 
 export const metadata: Metadata = {
   title: config.seo?.defaultTitle || `${config.business.name} - ${config.business.tagline}`,
@@ -31,7 +32,7 @@ export const metadata: Metadata = {
     description: config.business.description,
     url: config.business.url,
     siteName: config.business.name,
-    images: config.seo?.ogImage ? [{ url: config.seo.ogImage }] : [],
+    images: (config.seo?.ogImage || config.business.image) ? [{ url: config.seo?.ogImage || config.business.image }] : [],
     type: 'website',
   },
 };
@@ -113,15 +114,16 @@ export default function HomePage() {
       </section>
 
       {/* Answer Block for AI Overview */}
-      <section className="answer-block bg-gray-50 py-12 px-6">
+      <section className="bg-gray-50 py-12 px-6">
         <div className="max-w-4xl mx-auto">
-          <p className="text-lg leading-relaxed">
-            <strong>{businessName}</strong> is a trusted {displayCategory.toLowerCase()} serving{' '}
-            {config.address.city}, {config.address.state} and surrounding areas. We offer professional{' '}
-            {services.slice(0, 3).map(s => s.name.toLowerCase()).join(', ')}, and more.
-            Call <a href={`tel:${config.business.phone}`} className="text-primary font-semibold">{config.business.phone}</a>{' '}
-            for a free estimate.
-          </p>
+          <AICitationBlock
+            customLead={`${businessName} is a trusted ${displayCategory.toLowerCase()} serving ${config.address.city}, ${config.address.state}`}
+            additionalPoints={[
+              services.length > 0
+                ? `Services include ${services.slice(0, 3).map(s => s.name).join(', ')}`
+                : 'Multiple services available',
+            ]}
+          />
         </div>
       </section>
 

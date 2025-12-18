@@ -245,6 +245,12 @@ module.exports = {
   embeds: {
     gmbMapUrl: "",
     googleMapsApiKey: "",
+    // Third-party form embed (e.g., Jotform, Typeform, Google Forms)
+    // Paste the full iframe src URL from your form provider
+    formIframeUrl: "",
+    // Third-party review widget embed (e.g., Birdeye, Grade.us, EmbedSocial)
+    // Paste the full iframe src URL from your review widget provider
+    reviewIframeUrl: "",
   },
 
   // ═══════════════════════════════════════════════════════════════

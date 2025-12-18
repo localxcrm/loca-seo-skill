@@ -10,7 +10,7 @@ import {
   getAllServiceAreas,
   getBusinessName,
   getDisplayCategory,
-  getSchemaType,
+  hasLocalProof,
 } from '@/lib/site';
 import {
   generateLocalBusinessSchema,
@@ -23,6 +23,8 @@ import { ServiceGrid } from '@/components/ServiceCard';
 import FAQ from '@/components/FAQ';
 import CTABanner from '@/components/CTABanner';
 import CityMapEmbed from '@/components/CityMapEmbed';
+import AICitationBlock from '@/components/AICitationBlock';
+import LocalDeepParagraph from '@/components/LocalDeepParagraph';
 
 interface LocationPageProps {
   params: { city: string };
@@ -43,12 +45,8 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
   const title = `${displayCategory} in ${location.city} ${location.state} | ${businessName}`;
   const description = `Professional ${displayCategory.toLowerCase()} services in ${location.city}, ${location.state}. ${businessName} serves ${location.city} homeowners. Call ${config.business.phone} for a free estimate.`;
 
-  // Noindex pages without unique content
-  const hasUniqueContent = (
-    (location.neighborhoods && location.neighborhoods.length > 0) ||
-    (location.landmarks && location.landmarks.length > 0) ||
-    location.description
-  );
+  const shouldIndex = location.index !== false && hasLocalProof(location);
+  const ogImages = config.seo?.ogImage ? [{ url: config.seo.ogImage }] : [];
 
   return {
     title,
@@ -61,9 +59,15 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
       description,
       url: `${config.business.url}/locations/${location.slug}`,
       siteName: businessName,
+      images: ogImages,
     },
-    // Noindex weak pages
-    ...(location.index === false || !hasUniqueContent ? { robots: { index: false } } : {}),
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ogImages.map(i => i.url),
+    },
+    ...(shouldIndex ? {} : { robots: { index: false, follow: true } }),
   };
 }
 
@@ -73,21 +77,11 @@ export default function LocationPage({ params }: LocationPageProps) {
 
   const businessName = getBusinessName();
   const displayCategory = getDisplayCategory();
-  const schemaType = getSchemaType();
   const services = getAllServices();
   const nearbyLocations = getAllServiceAreas().filter(a => a.slug !== location.slug).slice(0, 6);
 
-  // Create location-specific config for schema
-  const locationOverride = {
-    address: {
-      ...config.address,
-      city: location.city,
-      state: location.state,
-    },
-  };
-
   // Generate schemas
-  const localBusinessSchema = generateLocalBusinessSchema(locationOverride);
+  const localBusinessSchema = generateLocalBusinessSchema();
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: config.business.url },
     { name: 'Locations', url: `${config.business.url}/locations` },
@@ -137,22 +131,13 @@ export default function LocationPage({ params }: LocationPageProps) {
         </h1>
 
         {/* Answer Block for AI Overview */}
-        <section className="answer-block bg-gray-50 p-6 rounded-lg border-l-4 border-primary mb-10">
-          <p className="text-lg mb-4">
-            <strong>{businessName}</strong> provides professional {displayCategory.toLowerCase()} services 
-            to homeowners in {location.city}, {location.state}
-            {location.neighborhoods && location.neighborhoods.length > 0 && 
-              ` including ${location.neighborhoods.slice(0, 3).join(', ')}`
-            }.
-            Call <a href={`tel:${config.business.phone}`} className="text-primary font-semibold">{config.business.phone}</a> for a free estimate.
-          </p>
-          <ul className="space-y-1">
-            <li>✓ Serving {location.city} and {location.county || 'surrounding areas'}</li>
-            <li>✓ Free estimates with transparent pricing</li>
-            <li>✓ Licensed and insured professionals</li>
-            <li>✓ {services.length} services available</li>
-          </ul>
-        </section>
+        <AICitationBlock
+          location={location}
+          additionalPoints={[
+            location.county ? `Serving ${location.county}` : 'Serving the local area',
+          ]}
+          className="mb-10"
+        />
 
         {/* City Map */}
         <section className="mb-10">
@@ -193,10 +178,16 @@ export default function LocationPage({ params }: LocationPageProps) {
           {location.landmarks && location.landmarks.length > 0 && (
             <p className="text-gray-700 leading-relaxed">
               We serve homes throughout {location.city}, from neighborhoods near {location.landmarks[0]} to 
-              areas around {location.landmarks.slice(1).join(' and ')}. No matter where you're located in {location.city}, 
-              we're here to help.
+              areas around {location.landmarks.slice(1).join(' and ')}. No matter where you&apos;re located in {location.city},{' '}
+              we&apos;re here to help.
             </p>
           )}
+        </section>
+
+        {/* Local Deep Paragraph (unique local proof) */}
+        <section className="mb-10">
+          <h2 className="text-2xl font-bold mb-4">Local Expertise in {location.city}</h2>
+          <LocalDeepParagraph location={location} />
         </section>
 
         {/* Neighborhoods */}

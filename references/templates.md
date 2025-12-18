@@ -60,7 +60,7 @@ export default function HomePage() {
       <Services services={config.services} city={config.address.city} />
 
       {/* Service Areas */}
-      <ServiceAreas areas={config.serviceArea} />
+      <ServiceAreas areas={config.serviceAreas} />
 
       {/* Trust Signals */}
       <WhyChooseUs />
@@ -166,10 +166,10 @@ export default function ServicePage({ params }: ServicePageProps) {
       <section>
         <h2>{service.name} Service Areas</h2>
         <ul>
-          {config.serviceArea.map((area) => (
-            <li key={area}>
-              <a href={`/locations/${area.toLowerCase().replace(/\s+/g, '-')}`}>
-                {service.name} in {area}
+          {config.serviceAreas.map((area) => (
+            <li key={area.slug}>
+              <a href={`/locations/${area.slug}/${service.slug}`}>
+                {service.name} in {area.city}
               </a>
             </li>
           ))}
@@ -201,20 +201,16 @@ interface LocationPageProps {
 }
 
 export async function generateStaticParams() {
-  return config.serviceArea.map((city) => ({
-    city: city.toLowerCase().replace(/\s+/g, '-'),
-  }));
+  return config.serviceAreas.map((area) => ({ city: area.slug }));
 }
 
 export async function generateMetadata({ params }: LocationPageProps): Promise<Metadata> {
-  const cityName = config.serviceArea.find(
-    (c) => c.toLowerCase().replace(/\s+/g, '-') === params.city
-  );
-  if (!cityName) return {};
+  const area = config.serviceAreas.find((a) => a.slug === params.city);
+  if (!area) return {};
 
   return {
-    title: `${config.gbpCategories.primary} ${cityName} ${config.address.state} | ${config.business.name}`,
-    description: `${config.business.name} provides ${config.gbpCategories.primary.toLowerCase()} services in ${cityName}, ${config.address.state}. 24/7 emergency service. Call ${config.business.phone}.`,
+    title: `${config.gbpCategories.primary} ${area.city} ${area.state} | ${config.business.name}`,
+    description: `${config.business.name} provides ${config.gbpCategories.primary.toLowerCase()} services in ${area.city}, ${area.state}. Call ${config.business.phone}.`,
     alternates: {
       canonical: `${config.business.url}/locations/${params.city}`,
     },
@@ -222,35 +218,30 @@ export async function generateMetadata({ params }: LocationPageProps): Promise<M
 }
 
 export default function LocationPage({ params }: LocationPageProps) {
-  const cityName = config.serviceArea.find(
-    (c) => c.toLowerCase().replace(/\s+/g, '-') === params.city
-  );
-  if (!cityName) notFound();
+  const area = config.serviceAreas.find((a) => a.slug === params.city);
+  if (!area) notFound();
 
-  const locationConfig = {
-    ...config,
-    address: { ...config.address, city: cityName },
-  };
-  const schema = generateLocalBusinessSchema(locationConfig);
+  // Do NOT overwrite the physical address in schema for service-area pages.
+  const schema = generateLocalBusinessSchema(config);
 
   return (
     <>
       <SchemaMarkup schema={schema} />
 
-      <h1>{config.gbpCategories.primary} in {cityName}, {config.address.state}</h1>
+      <h1>{config.gbpCategories.primary} in {area.city}, {area.state}</h1>
 
       {/* Direct Answer Block */}
       <section className="answer-block">
         <p>
           Looking for a reliable <strong>{config.gbpCategories.primary.toLowerCase()}</strong> in 
-          {cityName}? {config.business.name} serves {cityName} and surrounding areas 
+          {area.city}? {config.business.name} serves {area.city} and surrounding areas 
           with licensed, insured professionals available 24/7.
         </p>
       </section>
 
       {/* Local Content */}
       <section>
-        <h2>Our {config.gbpCategories.primary} Services in {cityName}</h2>
+        <h2>Our {config.gbpCategories.primary} Services in {area.city}</h2>
         <ul>
           {config.services.map((service) => (
             <li key={service.slug}>
@@ -261,7 +252,7 @@ export default function LocationPage({ params }: LocationPageProps) {
       </section>
 
       <section>
-        <h2>Why {cityName} Residents Choose Us</h2>
+        <h2>Why {area.city} Residents Choose Us</h2>
         {/* Local-specific content: neighborhoods, landmarks, local issues */}
       </section>
 
@@ -438,10 +429,10 @@ interface LocationServicePageProps {
 export async function generateStaticParams() {
   const params: { city: string; service: string }[] = [];
   
-  for (const city of config.serviceArea) {
+  for (const area of config.serviceAreas) {
     for (const service of config.services) {
       params.push({
-        city: city.toLowerCase().replace(/\s+/g, '-'),
+        city: area.slug,
         service: service.slug,
       });
     }
@@ -451,15 +442,13 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: LocationServicePageProps): Promise<Metadata> {
-  const cityName = config.serviceArea.find(
-    (c) => c.toLowerCase().replace(/\s+/g, '-') === params.city
-  );
+  const area = config.serviceAreas.find((a) => a.slug === params.city);
   const service = config.services.find((s) => s.slug === params.service);
   
-  if (!cityName || !service) return {};
+  if (!area || !service) return {};
 
-  const title = `${service.name} ${cityName} MA | ${config.business.name}`;
-  const description = `Professional ${service.name.toLowerCase()} services in ${cityName}, MA. ${config.business.name} offers expert ${service.name.toLowerCase()} for homeowners. Call ${config.business.phone} for a free estimate.`;
+  const title = `${service.name} ${area.city} ${area.state} | ${config.business.name}`;
+  const description = `Professional ${service.name.toLowerCase()} services in ${area.city}, ${area.state}. Call ${config.business.phone} for a free estimate.`;
 
   return {
     title,
@@ -471,40 +460,42 @@ export async function generateMetadata({ params }: LocationServicePageProps): Pr
 }
 
 export default function LocationServicePage({ params }: LocationServicePageProps) {
-  const cityName = config.serviceArea.find(
-    (c) => c.toLowerCase().replace(/\s+/g, '-') === params.city
-  );
+  const area = config.serviceAreas.find((a) => a.slug === params.city);
   const service = config.services.find((s) => s.slug === params.service);
   
-  if (!cityName || !service) notFound();
+  if (!area || !service) notFound();
+  const cityName = area.city;
+  const state = area.state;
+  const county = area.county || area.state;
 
   // Generate schemas
-  const serviceSchema = generateServiceSchema(service, { ...config, address: { ...config.address, city: cityName } });
-  const localBusinessSchema = generateLocalBusinessSchema({ ...config, address: { ...config.address, city: cityName } });
+  const comboUrl = `${config.business.url}/locations/${params.city}/${params.service}`;
+  const serviceSchema = generateServiceSchema(service, { url: comboUrl, areaServed: `${area.city}, ${area.state}` });
+  const localBusinessSchema = generateLocalBusinessSchema(config);
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: config.business.url },
     { name: 'Locations', url: `${config.business.url}/locations` },
-    { name: cityName, url: `${config.business.url}/locations/${params.city}` },
+    { name: area.city, url: `${config.business.url}/locations/${params.city}` },
     { name: service.name, url: `${config.business.url}/locations/${params.city}/${params.service}` },
   ]);
 
   // Generate FAQs specific to this service + location
   const faqs = [
     {
-      question: `How much does ${service.name.toLowerCase()} cost in ${cityName}?`,
-      answer: `${service.name} costs in ${cityName} vary based on the scope of work. ${config.business.name} offers free estimates with upfront, transparent pricing. Call ${config.business.phone} for a personalized quote.`,
+      question: `How much does ${service.name.toLowerCase()} cost in ${area.city}?`,
+      answer: `${service.name} in ${area.city} varies based on scope. ${config.business.name} offers free estimates with upfront, transparent pricing. Call ${config.business.phone}.`,
     },
     {
-      question: `How long does ${service.name.toLowerCase()} take in ${cityName}?`,
-      answer: `Project timelines depend on the size and complexity of the job. Most residential ${service.name.toLowerCase()} projects in ${cityName} are completed within 1-5 days. We'll provide a detailed timeline with your estimate.`,
+      question: `How long does ${service.name.toLowerCase()} take in ${area.city}?`,
+      answer: `Project timelines vary by scope. We'll provide a timeline with your estimate.`,
     },
     {
-      question: `Do you offer free estimates for ${service.name.toLowerCase()} in ${cityName}?`,
-      answer: `Yes! ${config.business.name} provides free, no-obligation estimates for all ${service.name.toLowerCase()} projects in ${cityName} and surrounding areas. Call ${config.business.phone} to schedule.`,
+      question: `Do you offer free estimates for ${service.name.toLowerCase()} in ${area.city}?`,
+      answer: `Yes! ${config.business.name} provides free, no-obligation estimates for ${service.name.toLowerCase()} in ${area.city}. Call ${config.business.phone} to schedule.`,
     },
     {
-      question: `Why choose ${config.business.name} for ${service.name.toLowerCase()} in ${cityName}?`,
-      answer: `${config.business.name} is a trusted local painting company serving ${cityName} homeowners. We offer professional workmanship, quality materials, and excellent customer service.`,
+      question: `Why choose ${config.business.name} for ${service.name.toLowerCase()} in ${area.city}?`,
+      answer: `${config.business.name} is a trusted local provider serving ${area.city} homeowners. We offer professional workmanship and transparent pricing.`,
     },
   ];
 
@@ -516,19 +507,19 @@ export default function LocationServicePage({ params }: LocationServicePageProps
       <nav className="breadcrumb">
         <a href="/">Home</a> &gt; 
         <a href="/locations">Locations</a> &gt; 
-        <a href={`/locations/${params.city}`}>{cityName}</a> &gt; 
+        <a href={`/locations/${params.city}`}>{area.city}</a> &gt; 
         <span>{service.name}</span>
       </nav>
 
       {/* H1 with keyword + city */}
-      <h1>{service.name} in {cityName}, MA</h1>
+      <h1>{service.name} in {cityName}, {state}</h1>
 
       {/* Direct Answer Block for AI Overview */}
       <section className="answer-block">
         <p>
           Looking for professional <strong>{service.name.toLowerCase()}</strong> in {cityName}? 
           {config.business.name} provides expert {service.name.toLowerCase()} services for 
-          homeowners throughout {cityName} and the surrounding Middlesex County area. 
+          homeowners throughout {cityName} and the surrounding {county} area. 
           Call <a href={`tel:${config.business.phone}`}>{config.business.phone}</a> for a free estimate.
         </p>
         <ul>
@@ -591,13 +582,13 @@ export default function LocationServicePage({ params }: LocationServicePageProps
       <section>
         <h2>{service.name} in Nearby Cities</h2>
         <ul>
-          {config.serviceArea
-            .filter((c) => c !== cityName)
+          {config.serviceAreas
+            .filter((a) => a.slug !== params.city)
             .slice(0, 6)
-            .map((c) => (
-              <li key={c}>
-                <a href={`/locations/${c.toLowerCase().replace(/\s+/g, '-')}/${service.slug}`}>
-                  {service.name} in {c}
+            .map((a) => (
+              <li key={a.slug}>
+                <a href={`/locations/${a.slug}/${service.slug}`}>
+                  {service.name} in {a.city}
                 </a>
               </li>
             ))}
@@ -872,10 +863,10 @@ export default function Footer() {
         <div className="footer-section">
           <h3>Service Areas</h3>
           <ul>
-            {config.serviceArea.map((area) => (
-              <li key={area}>
-                <Link href={`/locations/${area.toLowerCase().replace(/\s+/g, '-')}`}>
-                  {area}
+            {config.serviceAreas.map((area) => (
+              <li key={area.slug}>
+                <Link href={`/locations/${area.slug}`}>
+                  {area.city}
                 </Link>
               </li>
             ))}

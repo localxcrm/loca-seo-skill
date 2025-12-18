@@ -2,35 +2,47 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import config from '../../../site.config';
-import { generateLocalBusinessSchema, generateBreadcrumbSchema } from '@/lib/schema';
+import { generateBreadcrumbSchema, generateOrganizationSchema, generateOwnerSchema } from '@/lib/schema';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import Breadcrumb from '@/components/Breadcrumb';
 import CTABanner from '@/components/CTABanner';
 import { ReviewBadge } from '@/components/Reviews';
+import AICitationBlock from '@/components/AICitationBlock';
 
 export const metadata: Metadata = {
-  title: `About ${config.business.name} | ${config.address.city} ${config.business.type}`,
-  description: `Learn about ${config.business.name}, a trusted ${config.business.type.toLowerCase()} serving ${config.address.city}, ${config.address.state} since ${config.business.foundingDate}. Meet our team and learn our story.`,
+  title: `About ${config.business.name} | ${config.address.city} ${config.gbpCategories?.primary || 'Local Business'}`,
+  description: `Learn about ${config.business.name}, a trusted ${(config.gbpCategories?.primary || 'local business').toLowerCase()} serving ${config.address.city}, ${config.address.state} since ${config.business.foundingDate}.`,
   alternates: {
     canonical: `${config.business.url}/about`,
+  },
+  openGraph: {
+    title: `About ${config.business.name}`,
+    description: `Learn about ${config.business.name}, a trusted ${(config.gbpCategories?.primary || 'local business').toLowerCase()} serving ${config.address.city}, ${config.address.state}.`,
+    url: `${config.business.url}/about`,
+    siteName: config.business.name,
+    images: (config.seo?.ogImage || config.business.image) ? [{ url: config.seo?.ogImage || config.business.image }] : [],
+    type: 'website',
   },
 };
 
 export default function AboutPage() {
-  const localBusinessSchema = generateLocalBusinessSchema(config);
+  const organizationSchema = generateOrganizationSchema();
+  const ownerSchema = generateOwnerSchema();
   const breadcrumbSchema = generateBreadcrumbSchema([
     { name: 'Home', url: config.business.url },
     { name: 'About', url: `${config.business.url}/about` },
   ]);
 
   const about = config.about || {};
+  const displayCategory = config.gbpCategories?.primary || 'Local Business';
+  const displayCategoryLower = displayCategory.toLowerCase();
   const yearsInBusiness = config.business.foundingDate 
     ? new Date().getFullYear() - parseInt(config.business.foundingDate) 
     : null;
 
   return (
     <>
-      <SchemaMarkup schema={[localBusinessSchema, breadcrumbSchema]} />
+      <SchemaMarkup schema={[organizationSchema, ownerSchema, breadcrumbSchema]} />
 
       <div className="max-w-6xl mx-auto px-6 py-12">
         <Breadcrumb
@@ -42,6 +54,11 @@ export default function AboutPage() {
 
         <h1 className="text-4xl font-bold mb-6">About {config.business.name}</h1>
 
+        <AICitationBlock
+          customLead={`${config.business.name} is a trusted ${displayCategoryLower} serving ${config.address.city}, ${config.address.state}`}
+          className="mb-12"
+        />
+
         {/* Intro Section */}
         <section className="grid lg:grid-cols-2 gap-12 mb-16">
           <div>
@@ -51,8 +68,8 @@ export default function AboutPage() {
             
             {yearsInBusiness && (
               <p className="text-gray-700 leading-relaxed mb-6">
-                For over <strong>{yearsInBusiness} years</strong>, we've been providing exceptional 
-                {config.business.type.toLowerCase()} services to homeowners in {config.address.city} 
+                For over <strong>{yearsInBusiness} years</strong>, we&apos;ve been providing exceptional 
+                {displayCategoryLower} services to homeowners in {config.address.city} 
                 and surrounding communities.
               </p>
             )}
@@ -70,10 +87,12 @@ export default function AboutPage() {
                   <span>Est. {config.business.foundingDate}</span>
                 </div>
               )}
-              {config.business.license && (
+              {(config.trustSignals?.license?.display || config.trustSignals?.insurance?.coverage) && (
                 <div className="flex items-center gap-2 bg-gray-50 px-4 py-2 rounded-lg">
                   <span>📋</span>
-                  <span>Licensed & Insured</span>
+                  <span>
+                    {config.trustSignals?.license?.display ? config.trustSignals.license.display : 'Licensed'}{config.trustSignals?.insurance?.coverage ? ` • Insured up to ${config.trustSignals.insurance.coverage}` : ''}
+                  </span>
                 </div>
               )}
             </div>

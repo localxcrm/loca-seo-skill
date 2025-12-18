@@ -11,6 +11,7 @@ import {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = config.business.url;
+  type ChangeFrequency = MetadataRoute.Sitemap[number]['changeFrequency'];
 
   const sitemap: MetadataRoute.Sitemap = [];
 
@@ -18,7 +19,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   sitemap.push({
     url: baseUrl,
     lastModified: new Date(),
-    changeFrequency: getSitemapChangeFreq('homepage') as any,
+    changeFrequency: getSitemapChangeFreq('homepage') as ChangeFrequency,
     priority: getSitemapPriority('homepage'),
   });
 
@@ -34,7 +35,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     sitemap.push({
       url: `${baseUrl}${page.path}`,
       lastModified: new Date(),
-      changeFrequency: getSitemapChangeFreq(page.type) as any,
+      changeFrequency: getSitemapChangeFreq(page.type) as ChangeFrequency,
       priority: getSitemapPriority(page.type),
     });
   });
@@ -44,7 +45,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     sitemap.push({
       url: `${baseUrl}/services/${service.slug}`,
       lastModified: new Date(),
-      changeFrequency: getSitemapChangeFreq('services') as any,
+      changeFrequency: getSitemapChangeFreq('services') as ChangeFrequency,
       priority: getSitemapPriority('services'),
     });
   });
@@ -54,7 +55,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     sitemap.push({
       url: `${baseUrl}/locations/${area.slug}`,
       lastModified: new Date(),
-      changeFrequency: getSitemapChangeFreq('locations') as any,
+      changeFrequency: getSitemapChangeFreq('locations') as ChangeFrequency,
       priority: getSitemapPriority('locations'),
     });
   });
@@ -65,7 +66,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     sitemap.push({
       url: `${baseUrl}/locations/${area.slug}/${service.slug}`,
       lastModified: new Date(),
-      changeFrequency: getSitemapChangeFreq('locationService') as any,
+      changeFrequency: getSitemapChangeFreq('locationService') as ChangeFrequency,
       priority: getSitemapPriority('locationService'),
     });
   });

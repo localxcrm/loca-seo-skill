@@ -1,5 +1,5 @@
 // src/components/CityMapEmbed.tsx
-import { config, getMapZoom, getBusinessName } from '@/lib/site';
+import { getMapZoom } from '@/lib/site';
 
 interface CityMapEmbedProps {
   city: string;

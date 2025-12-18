@@ -4,12 +4,21 @@ import config from '../../../site.config';
 import { generateBreadcrumbSchema } from '@/lib/schema';
 import SchemaMarkup from '@/components/SchemaMarkup';
 import Breadcrumb from '@/components/Breadcrumb';
+import AICitationBlock from '@/components/AICitationBlock';
 
 export const metadata: Metadata = {
   title: `Service Areas | ${config.business.name}`,
   description: `${config.business.name} serves ${config.address.city} and surrounding areas with professional ${config.gbpCategories.primary.toLowerCase()} services. Find your location.`,
   alternates: {
     canonical: `${config.business.url}/locations`,
+  },
+  openGraph: {
+    title: `Service Areas | ${config.business.name}`,
+    description: `${config.business.name} serves ${config.address.city} and surrounding areas with professional ${config.gbpCategories.primary.toLowerCase()} services.`,
+    url: `${config.business.url}/locations`,
+    siteName: config.business.name,
+    images: (config.seo?.ogImage || config.business.image) ? [{ url: config.seo?.ogImage || config.business.image }] : [],
+    type: 'website',
   },
 };
 
@@ -45,20 +54,12 @@ export default function LocationsPage() {
       <h1>{config.gbpCategories.primary} Service Areas</h1>
 
       {/* Answer Block */}
-      <section className="answer-block">
-        <p>
-          <strong>{config.business.name}</strong> provides {config.gbpCategories.primary.toLowerCase()}{' '}
-          services to {config.serviceAreas.filter((a) => a.index !== false).length}+ communities
-          in the {config.address.city} area. Based in {config.address.city}, {config.address.state},
-          we serve residential and commercial customers throughout the region.
-        </p>
-        <ul>
-          <li>Serving the area since {config.business.foundingDate}</li>
-          <li>Licensed {config.address.state} contractor</li>
-          <li>Same-day service available</li>
-          <li>Free estimates for all locations</li>
-        </ul>
-      </section>
+      <AICitationBlock
+        customLead={`${config.business.name} serves ${config.address.city}, ${config.address.state} and nearby communities with professional ${config.gbpCategories.primary.toLowerCase()} services`}
+        additionalPoints={[
+          `Serving ${config.serviceAreas.filter((a) => a.index !== false).length}+ communities`,
+        ]}
+      />
 
       {/* Locations by County */}
       {Object.entries(locationsByCounty).map(([county, areas]) => (
@@ -107,7 +108,7 @@ export default function LocationsPage() {
 
       {/* CTA */}
       <section className="cta">
-        <h2>Don't See Your City?</h2>
+        <h2>Don&apos;t See Your City?</h2>
         <p>
           We may still serve your area. Contact us to check availability and schedule a free
           estimate.
