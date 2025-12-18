@@ -9,13 +9,13 @@
             "name": "seo-website-builder",
             "version": "1.0.0",
             "description": "Build SEO and AEO optimized local business websites with React/Next.js. Use when creating local business sites, service pages, location pages, landing pages. Includes pre-built templates, schema markup generators, technical SEO setup, and AI Overview optimization.",
-            "source": ".",
-            "skills": {
-                "seo-website-builder": {
-                    "file": "SKILL.md",
-                    "description": "Build SEO and AEO optimized local business websites"
+            "source": "./",
+            "skills": [
+                {
+                    "name": "seo-website-builder",
+                    "path": "./SKILL.md"
                 }
-            }
+            ]
         }
     ]
 }
