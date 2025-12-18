@@ -106,6 +106,65 @@ Answer blocks optimized for AI Overviews:
 - Verifiable facts (license, years)
 - Under 100 words for extraction
 
+## Agents
+
+This skill includes autonomous agents for automated website building.
+
+### Option A: Single Agent (Simple)
+
+Use `website-builder-solo` for end-to-end website generation in one workflow:
+
+```
+.claude/agents/website-builder-solo.md
+```
+
+Handles: Intake → Research → Scoring → Generation
+
+### Option B: Multi-Agent System (Advanced)
+
+Use specialized agents orchestrated by `website-builder`:
+
+```
+.claude/agents/
+├── website-builder.md              # Orchestrator
+└── specialists/
+    ├── intake-collector.md         # Gathers business data
+    ├── local-researcher.md         # Finds neighborhoods, landmarks
+    ├── content-scorer.md           # Scores pages (7+ to index)
+    ├── site-generator.md           # Builds the Next.js site
+    ├── faq-generator.md            # Creates location-specific FAQs
+    ├── competitor-analyzer.md      # Analyzes competitor SEO
+    ├── site-migrator.md            # Migrates existing sites
+    ├── batch-processor.md          # Processes multiple businesses
+    └── config-validator.md         # Validates site.config.js
+```
+
+### Agent Workflow
+
+```
+User Request
+     ↓
+┌─────────────────────────────────┐
+│     website-builder             │
+│     (orchestrator)              │
+└─────────────────────────────────┘
+     ↓
+┌──────────┬──────────┬──────────┐
+│ intake   │ local    │ faq      │  ← Parallel
+│ collector│ research │ generator│
+└──────────┴──────────┴──────────┘
+     ↓
+┌─────────────────────────────────┐
+│     content-scorer              │
+└─────────────────────────────────┘
+     ↓
+┌─────────────────────────────────┐
+│     site-generator              │
+└─────────────────────────────────┘
+     ↓
+Complete Website
+```
+
 ## Documentation
 
 | Document | Purpose |
