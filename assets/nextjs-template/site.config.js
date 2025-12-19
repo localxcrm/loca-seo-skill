@@ -18,8 +18,17 @@ module.exports = {
     url: "https://yourbusiness.com",
     logo: "/images/logo.png",
     image: "/images/hero.jpg",
+    heroImage: "/images/hero-bg.jpg", // Full-width hero background
     priceRange: "$$",
     foundingDate: "2010", // Exact year (not "5+ years")
+    yearsInBusiness: 15,  // Number for display (e.g., "15+ years")
+    warranty: "3-Year Workmanship Warranty", // Warranty text
+
+    // License numbers (displayed in footer)
+    licenses: [
+      { type: "HIC", number: "123456" },
+      // { type: "CS", number: "789012" },
+    ],
   },
 
   // ═══════════════════════════════════════════════════════════════
@@ -69,14 +78,36 @@ module.exports = {
   // BUSINESS HOURS
   // ═══════════════════════════════════════════════════════════════
   hours: {
-    monday: "08:00-17:00",
-    tuesday: "08:00-17:00",
-    wednesday: "08:00-17:00",
-    thursday: "08:00-17:00",
-    friday: "08:00-17:00",
-    saturday: "09:00-14:00",
-    sunday: "Closed",
+    display: "Mon-Sun: 7AM-7PM", // Short display for top bar
+    monday: "07:00-19:00",
+    tuesday: "07:00-19:00",
+    wednesday: "07:00-19:00",
+    thursday: "07:00-19:00",
+    friday: "07:00-19:00",
+    saturday: "07:00-19:00",
+    sunday: "07:00-19:00",
   },
+
+  // ═══════════════════════════════════════════════════════════════
+  // FINANCING
+  // ═══════════════════════════════════════════════════════════════
+  financing: {
+    available: true,
+    provider: "HFS Financial", // e.g., "HFS Financial", "Synchrony"
+    url: "/financing",         // Link to financing page or external URL
+  },
+
+  // ═══════════════════════════════════════════════════════════════
+  // MANUFACTURER PARTNERS
+  // ═══════════════════════════════════════════════════════════════
+  manufacturers: [
+    { name: "Trex", logo: "/images/manufacturers/trex.png" },
+    { name: "CertainTeed", logo: "/images/manufacturers/certainteed.png" },
+    { name: "TimberTech", logo: "/images/manufacturers/timbertech.png" },
+    { name: "Owens Corning", logo: "/images/manufacturers/owens-corning.png" },
+    { name: "James Hardie", logo: "/images/manufacturers/james-hardie.png" },
+    { name: "LP SmartSide", logo: "/images/manufacturers/lp-smartside.png" },
+  ],
 
   // ═══════════════════════════════════════════════════════════════
   // GBP CATEGORIES
@@ -94,25 +125,37 @@ module.exports = {
     {
       name: "Service Name",
       slug: "service-name",
+      category: "Services", // For dropdown grouping (e.g., "Decking", "Fencing", "Other")
+      icon: "🔧", // Emoji or icon class for service cards
       description: "Brief description for meta tags.",
       longDescription: "Longer description for page content.",
-      
+      tagline: "Short compelling tagline for hero section", // Hero subtitle
+      heroImage: "/images/services/service-hero.jpg", // Service-specific hero background
+
       // PRICING (Required for AI citation)
       priceRange: "$100-500",
       priceMin: 100,
       priceMax: 500,
       priceCurrency: "USD",
-      
+
       // TIMING (Required for AI citation)
       duration: "1-2 days",
-      
+
+      // BENEFITS (4 cards for service page)
+      benefits: [
+        { icon: "🏡", title: "Benefit 1", description: "Why this matters to customers" },
+        { icon: "📈", title: "Benefit 2", description: "Another key benefit" },
+        { icon: "🛡️", title: "Benefit 3", description: "Quality or durability benefit" },
+        { icon: "👷", title: "Benefit 4", description: "Experience or expertise benefit" },
+      ],
+
       // EXPERTISE SIGNALS
       features: [
         "Feature 1",
         "Feature 2",
         "Feature 3",
       ],
-      
+
       // PROCESS (for expertise content)
       process: [
         { step: 1, name: "Step Name", description: "What happens in this step" },
@@ -120,19 +163,19 @@ module.exports = {
         { step: 3, name: "Step Name", description: "What happens in this step" },
         { step: 4, name: "Step Name", description: "What happens in this step" },
       ],
-      
+
       // MATERIALS (expertise signal)
       materials: [
         "Brand/material you use",
         "Another brand/material",
       ],
-      
+
       // COMMON ISSUES (expertise content)
       commonIssues: [
         "Common problem DIYers face",
         "What usually goes wrong",
       ],
-      
+
       // SERVICE-SPECIFIC FAQs
       faqs: [
         {
@@ -140,10 +183,10 @@ module.exports = {
           answer: "This service typically costs $100-500...",
         },
       ],
-      
+
       // INDEX CONTROL
       index: true,
-      
+
       // SHOW PROJECT GALLERY (pulls from projects section by slug)
       showProjects: true,
     },
@@ -293,6 +336,7 @@ module.exports = {
       "Pain point 2",
     ],
     tone: "professional", // professional, friendly, expert, casual
+    companyStory: "", // Optional: Custom intro paragraph for homepage
   },
 
   // ═══════════════════════════════════════════════════════════════

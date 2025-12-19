@@ -83,7 +83,7 @@ Read and follow: `skill-seo-website-builder/references/local-proof-checklist.md`
 
 ## Questionnaire Structure
 
-### Section 1: Business Information (18 fields)
+### Section 1: Business Information (24 fields)
 ```
 1. Business Name: _______________
 2. Legal Name (if different): _______________
@@ -99,10 +99,16 @@ Read and follow: `skill-seo-website-builder/references/local-proof-checklist.md`
 12. State: _______________
 13. ZIP: _______________
 14. Founded Year: _______________
-15. Price Range ($-$$$$): _______________
-16. Latitude: _______________
-17. Longitude: _______________
-18. Hours (Mon-Sun): _______________
+15. Years in Business (number for display): _______________
+16. Price Range ($-$$$$): _______________
+17. Latitude: _______________
+18. Longitude: _______________
+19. Hours (Mon-Sun): _______________
+20. Hours Display (short, e.g., "Mon-Sun: 7AM-7PM"): _______________
+21. Warranty Text (e.g., "3-Year Workmanship Warranty"): _______________
+22. Hero Background Image Path: _______________
+23. Logo Path: _______________
+24. OG Image Path (1200x630): _______________
 ```
 
 ### Section 2: GBP Categories (2 fields)
@@ -111,29 +117,40 @@ Read and follow: `skill-seo-website-builder/references/local-proof-checklist.md`
 20. Secondary Categories (list 3-4): _______________
 ```
 
-### Section 3: Trust Signals (8 fields)
+### Section 3: Trust Signals & Licenses (12 fields)
 ```
-21. License Number: _______________
-22. License Type: _______________
-23. License State: _______________
-24. Insurance Coverage Amount: _______________
-25. Insurance Provider: _______________
-26. Bonded (Yes/No): _______________
-27. Certifications (list): _______________
-28. Affiliations (list): _______________
+25. License 1 Type (e.g., HIC, CS): _______________
+26. License 1 Number: _______________
+27. License 2 Type (optional): _______________
+28. License 2 Number (optional): _______________
+29. License State: _______________
+30. Insurance Coverage Amount: _______________
+31. Insurance Provider: _______________
+32. Bonded (Yes/No): _______________
+33. Certifications (list): _______________
+34. Affiliations (list): _______________
+35. Financing Available (Yes/No): _______________
+36. Financing Provider (e.g., HFS Financial): _______________
 ```
 
-### Section 4: Services (per service, ~8 fields each)
+### Section 4: Services (per service, ~14 fields each)
 ```
 For each service:
-29. Service Name: _______________
-30. Slug: _______________
-31. Description: _______________
-32. Price Range: _______________
-33. Duration: _______________
-34. Process Steps: _______________
-35. Materials/Brands Used: _______________
-36. Common Issues You Fix: _______________
+37. Service Name: _______________
+38. Slug: _______________
+39. Category (for nav grouping, e.g., "Decking", "Fencing"): _______________
+40. Icon (emoji, e.g., "🔧"): _______________
+41. Brief Description (for meta): _______________
+42. Long Description (for page content): _______________
+43. Tagline (for hero section): _______________
+44. Hero Image Path: _______________
+45. Price Range: _______________
+46. Duration: _______________
+47. Process Steps (4 steps): _______________
+48. Features (list): _______________
+49. Materials/Brands Used: _______________
+50. Common Issues You Fix: _______________
+51. Benefits (4 items with icon, title, description): _______________
 ```
 
 ### Section 5: Service Areas (per area, ~10 fields each)
@@ -153,44 +170,52 @@ For each city:
 
 ### Section 6: Reviews & Social (8 fields)
 ```
-47. Google Review URL: _______________
-48. Google Place ID: _______________
-49. Total Reviews: _______________
-50. Average Rating: _______________
-51. Facebook URL: _______________
-52. Instagram URL: _______________
-53. Yelp URL: _______________
-54. Other Social: _______________
+62. Google Review URL: _______________
+63. Google Place ID: _______________
+64. Total Reviews: _______________
+65. Average Rating: _______________
+66. Facebook URL: _______________
+67. Instagram URL: _______________
+68. Yelp URL: _______________
+69. Other Social: _______________
 ```
 
-### Section 7: Embeds & Assets (4 fields)
+### Section 7: Manufacturer Partners (list)
 ```
-55. GMB Map Embed URL: _______________
-56. Form Embed URL (lead form): _______________
-57. Review Widget URL (if any): _______________
-58. Logo + OG image paths (1200x630): _______________
-```
-
-### Section 8: Branding & Messaging (8 fields)
-```
-59. Unique Selling Points (3-5): _______________
-60. Customer Pain Points (2-3): _______________
-61. Target Audience: _______________
-62. Tone (professional/friendly/expert/casual): _______________
-63. Brand Colors - Primary: _______________
-64. Brand Colors - Secondary: _______________
-65. Brand Colors - Accent: _______________
-66. Social icons placement (header/footer/both): _______________
+For each manufacturer/brand partner:
+70. Manufacturer Name: _______________
+71. Logo Image Path: _______________
+(Repeat for each - typically 4-8 partners)
 ```
 
-### Section 9: About Page (6 fields)
+### Section 8: Embeds & Assets (4 fields)
 ```
-67. Company Story: _______________
-68. Owner Name: _______________
-69. Owner Title: _______________
-70. Owner Bio: _______________
-71. Team Size: _______________
-72. Awards/Recognition: _______________
+72. GMB Map Embed URL: _______________
+73. Form Embed URL (lead form): _______________
+74. Review Widget URL (if any): _______________
+```
+
+### Section 9: Branding & Messaging (8 fields)
+```
+75. Unique Selling Points (3-5): _______________
+76. Customer Pain Points (2-3): _______________
+77. Target Audience: _______________
+78. Tone (professional/friendly/expert/casual): _______________
+79. Brand Colors - Primary: _______________
+80. Brand Colors - Secondary: _______________
+81. Brand Colors - Accent: _______________
+82. Social icons placement (header/footer/both): _______________
+83. CTA Button Text (e.g., "Get a Free Quote"): _______________
+```
+
+### Section 10: About Page (6 fields)
+```
+84. Company Story: _______________
+85. Owner Name: _______________
+86. Owner Title: _______________
+87. Owner Bio: _______________
+88. Team Size: _______________
+89. Awards/Recognition: _______________
 ```
 
 ## Conversation Flow
